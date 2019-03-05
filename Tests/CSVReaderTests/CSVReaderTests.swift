@@ -16,8 +16,16 @@ final class CSVReaderTests: XCTestCase {
         let thirdLine = csvReader.readLine()
         XCTAssertNil(thirdLine)
     }
+    
+    func testCSVQuotedStringRead() throws {
+        let csvString = "\"1\",\"2\",\"3\",\"4\",\"5\"\n\"hoi\",\"lol\",\"\",\"\",\"haha\""
+        let csvReader = try CSVReader(string: csvString, hasQuotes: true)
+        print(csvReader.headers)
+        print(csvReader.readLine())
+    }
 
     static var allTests = [
         ("testCSVStringRead", testCSVStringRead),
+        ("testCSVQuotedStringRead", testCSVQuotedStringRead)
     ]
 }

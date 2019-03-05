@@ -55,7 +55,17 @@ public class CSVReader {
         var strings: [String] = []
         if hasQuotes {
             
-            guard let lineData = line.data(using: self.fileReader.encoding) else {
+            var cleanLine = line
+            
+            // remove start and end quotes
+            if line.hasPrefix("\"") {
+                cleanLine = String(cleanLine.dropFirst())
+            }
+            if line.hasSuffix("\"") {
+                cleanLine = String(cleanLine.dropLast())
+            }
+            
+            guard let lineData = cleanLine.data(using: self.fileReader.encoding) else {
                 fatalError("Could not convert string to data")
             }
             
@@ -72,6 +82,11 @@ public class CSVReader {
                     strings.append(string)
                     lowerIndex = range.upperBound
                 } else {
+                    let subData = lineData.subdata(in: lowerIndex..<lineData.endIndex)
+                    guard let string = String(data: subData, encoding: self.fileReader.encoding) else {
+                        fatalError("Could not convert data to string")
+                    }
+                    strings.append(string)
                     break
                 }
             }
