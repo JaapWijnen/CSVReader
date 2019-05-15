@@ -7,7 +7,7 @@ public class CSVReader {
     private let hasQuotes: Bool
     private let hasHeader: Bool
     public var headers: [String]?
-    private(set) public var currentLine: [String]?
+    private(set) public var currentLine: [String?]?
     
     @inlinable
     public convenience init(fileAtPath path: String, hasHeader: Bool = true, hasQuotes: Bool = false, chunkSize: Int = 4096, encoding: String.Encoding = .utf8) throws {
@@ -30,7 +30,7 @@ public class CSVReader {
             guard let headers = self.readLine() else {
                 throw CSVReaderError.cannotReadHeaderRow
             }
-            self.headers = headers
+            self.headers = headers as! [String]
         }
     }
     
@@ -42,17 +42,17 @@ public class CSVReader {
             guard let headers = self.readLine() else {
                 throw CSVReaderError.cannotReadHeaderRow
             }
-            self.headers = headers
+            self.headers = headers as! [String]
         }
     }
     
     @discardableResult
-    public func readLine() -> [String]? {
+    public func readLine() -> [String?]? {
         guard let line = self.fileReader.readLine() else {
             return nil
         }
         
-        var strings: [String] = []
+        var strings: [String?] = []
         if hasQuotes {
             
             var cleanLine = line
@@ -79,14 +79,22 @@ public class CSVReader {
                     guard let string = String(data: subData, encoding: self.fileReader.encoding) else {
                         fatalError("Could not convert data to string")
                     }
-                    strings.append(string)
+                    if string.isEmpty {
+                        strings.append(nil)
+                    } else {
+                        strings.append(string)
+                    }
                     lowerIndex = range.upperBound
                 } else {
                     let subData = lineData.subdata(in: lowerIndex..<lineData.endIndex)
                     guard let string = String(data: subData, encoding: self.fileReader.encoding) else {
                         fatalError("Could not convert data to string")
                     }
-                    strings.append(string)
+                    if string.isEmpty {
+                        strings.append(nil)
+                    } else {
+                        strings.append(string)
+                    }
                     break
                 }
             }
