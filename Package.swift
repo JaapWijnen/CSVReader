@@ -7,7 +7,7 @@ let package = Package(
         .library(name: "CSVReader", targets: ["CSVReader"]),
     ],
     dependencies: [
-        .package(url: "../FileReader", .branch("master")),
+        .package(url: "git@github.com:JaapWijnen/FileReader.git", .branch("master")),
     ],
     targets: [
         .target(name: "CSVReader", dependencies: ["FileReader"]),
