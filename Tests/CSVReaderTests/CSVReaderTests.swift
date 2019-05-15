@@ -20,8 +20,8 @@ final class CSVReaderTests: XCTestCase {
     func testCSVQuotedStringRead() throws {
         let csvString = "\"1\",\"2\",\"3\",\"4\",\"5\"\n\"hoi\",\"lol\",\"\",\"\",\"haha\""
         let csvReader = try CSVReader(string: csvString, hasQuotes: true)
-        print(csvReader.headers)
-        print(csvReader.readLine())
+        XCTAssertEqual(csvReader.headers, ["1", "2", "3", "4", "5"])
+        XCTAssertEqual(csvReader.readLine(), ["hoi", "lol", nil, nil, "haha"])
     }
 
     static var allTests = [
