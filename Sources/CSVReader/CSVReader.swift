@@ -105,6 +105,11 @@ public class CSVReader {
         return strings
     }
     
+    public func lineCount() -> Int {
+        return self.fileReader.lineCount()
+        //return hasHeader ? fileLineCount-1 : fileLineCount
+    }
+    
     public subscript(key: String) -> String?  {
         guard let headers = self.headers else {
             print("Subscripting CSVReader requires headers in file, none were found")
