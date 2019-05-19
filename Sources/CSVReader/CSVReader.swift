@@ -106,8 +106,12 @@ public class CSVReader {
     }
     
     public func lineCount() -> Int {
-        return self.fileReader.lineCount()
-        //return hasHeader ? fileLineCount-1 : fileLineCount
+        let fileLineCount = self.fileReader.lineCount()
+        return hasHeader ? fileLineCount-1 : fileLineCount
+    }
+    
+    public func linesLeft() -> Int {
+        return self.fileReader.linesLeft()
     }
     
     public subscript(key: String) -> String?  {
